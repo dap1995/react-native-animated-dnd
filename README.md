@@ -1,22 +1,14 @@
-# React Native DragNDrop Tags
+# React Native Animated DND
+It's a drag and drop customizable list component to re-order, create, and delete list items.
 
 This projects was created following the rationalappdev.com tutorial.
+See [RationalAppDev Tutorial](https://github.com/rationalappdev/react-native-drag-and-drop-tags-tutorial).
 
 The difference from tutorial were:
  - Project settings (ESLint, Dependencies versions and Etc.).
  - Fixes about new Flow warnings.
- - It is not able to create new tags.
- - It doesn't create new tags.
+ - It has been changed to be reusable
 
 ### Contributions
-This project has some pending issues:
-  - Must fix the isMount warning
-  - Must have a modal to creating tags
-
-Last but not least, contribute in your own way!
-
-### References
-[RationalAppDev Tutorial](https://github.com/rationalappdev/react-native-drag-and-drop-tags-tutorial)
-
-Thanks rationalappdev.com!
+Contribute in your own way!
 
