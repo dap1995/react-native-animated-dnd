@@ -1,0 +1,6 @@
+{
+  "editor.tabSize": 2,
+  "editor.detectIndentation": true,
+  "flow.useNPMPackagedFlow": true,
+  "javascript.validate.enable": false,
+}
