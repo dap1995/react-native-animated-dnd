@@ -7,28 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
-
-export default class Main extends PureComponent {
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar hidden={true} />
-
-        <View style={styles.header}>
-          <Text style={[styles.text, styles.title]}>
-            Let's drag and drop some tags!
-          </Text>
-          <Text style={styles.text}>
-            Drag and drop tags to reorder, tap to remove or press Add New to add new tags.
-          </Text>
-        </View>
-
-      </View>
-    );
-  }
-  
-}
+import Tags from './src/components/Tags';
 
 const styles = StyleSheet.create({
   container: {
@@ -51,3 +30,43 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+const TAGS = [
+  '#love',
+  '#instagood',
+  '#photooftheday',
+  '#beautiful',
+  '#fashion',
+  '#happy',
+  '#tbt',
+  '#cute',
+  '#followme',
+  '#like4like',
+  '#friends',
+];
+
+type Props = {};
+export default class Main extends PureComponent<Props> {
+  render() {
+    return (
+      <View style={styles.container}>
+        <StatusBar hidden={true} />
+
+        <View style={styles.header}>
+          <Text style={[styles.text, styles.title]}>
+            Let's drag and drop some tags!
+          </Text>
+          <Text style={styles.text}>
+            Drag and drop tags to reorder, tap to remove or press Add New to add new tags.
+          </Text>
+        </View>
+
+        <Tags
+          tags={TAGS}
+          onPressAddNewTag={() => {}} // do nothing for now
+        />
+
+      </View>
+    );
+  }
+}
