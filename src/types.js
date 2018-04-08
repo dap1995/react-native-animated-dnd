@@ -1,7 +1,7 @@
 // @flow
 // Tag object type
-export type TagObject = {
-  title: string, // tag title
+export type ItemObject = {
+  key: string,
   tlX?: number, // top left x coordinate
   tlY?: number, // top left y coordinate
   brX?: number, // bottom right x coordinate
@@ -23,4 +23,8 @@ export type GestureState = {
   vy: number, // current velocity of the gesture
   x0: number, // the screen coordinates of the responder grant
   y0: number, // the screen coordinates of the responder grant
+};
+
+export type ItemComponentProps = {
+  item: ItemObject,
 };

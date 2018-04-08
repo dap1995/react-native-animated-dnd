@@ -1,12 +1,12 @@
 // @flow
 
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import {
   Text,
   View,
 } from 'react-native';
-import Tag from './Tag';
-import type { TagObject } from '../types';
+import ItemWrapper from './ItemWrapper';
+import type { ItemComponentProps, ItemObject } from '../types';
 
 const styles = {
   container: {
@@ -29,13 +29,14 @@ const styles = {
 };
 
 type Props = {
-  tags: TagObject[],
+  items: ItemObject[],
+  ItemElement: React.ComponentType<ItemComponentProps>,
   // Called when user taps 'Add new' button
   onPressAddNew: () => void,
-  // Passes these two callbacks down to Tag component
-  onPress: (tag: TagObject) => void,
-  onRenderTag: (
-    tag: TagObject,
+  // Passes these two callbacks down to Item component
+  onPress: (item: ItemObject) => void,
+  onRenderItem: (
+    item: ItemObject,
     screenX: number,
     screenY: number,
     width: number,
@@ -43,26 +44,28 @@ type Props = {
   ) => void,
 };
 
-export default class TagsArea extends PureComponent<Props> {
+export default class Area extends React.PureComponent<Props> {
   props: Props;
 
   render() {
     const {
-      tags,
+      items,
       onPress,
       onPressAddNew,
-      onRenderTag,
+      onRenderItem,
+      ItemElement,
     } = this.props;
 
     return (
       <View style={styles.container}>
         {
-          tags.map(tag =>
-          <Tag
-            key={tag.title}
-            tag={tag}
+          items.map(item =>
+          <ItemWrapper
+            key={item.key}
+            item={item}
             onPress={onPress}
-            onRender={onRenderTag}
+            onRender={onRenderItem}
+            ItemElement={ItemElement}
           />)
         }
         <Text

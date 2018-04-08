@@ -7,7 +7,8 @@ import {
   Text,
   View,
 } from 'react-native';
-import Tags from './src/components/Tags';
+import AnimatedDND from './src/components/AnimatedDND';
+import type { ItemObject, ItemComponentProps } from './src/types';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,19 +32,31 @@ const styles = StyleSheet.create({
   },
 });
 
-const TAGS = [
-  '#love',
-  '#instagood',
-  '#photooftheday',
-  '#beautiful',
-  '#fashion',
-  '#happy',
-  '#tbt',
-  '#cute',
-  '#followme',
-  '#like4like',
-  '#friends',
+const ITEMS: ItemObject[] = [
+  { key: '#love' },
+  { key: '#instagood' },
+  { key: '#photooftheday' },
+  { key: '#beautiful' },
+  { key: '#fashion' },
+  { key: '#happy' },
+  { key: '#tbt' },
+  { key: '#cute' },
+  { key: '#followme' },
+  { key: '#like4like' },
+  { key: '#friends' },
 ];
+
+class ExampleItem extends React.Component<ItemComponentProps> {
+  render() {
+    const { item: { isBeingDragged, key } } = this.props;
+    const style = isBeingDragged && { backgroundColor: 'red' };
+    return (
+      <View style={style}>
+        <Text>{key}</Text>
+      </View>
+    );
+  }
+}
 
 type Props = {};
 export default class Main extends PureComponent<Props> {
@@ -54,18 +67,18 @@ export default class Main extends PureComponent<Props> {
 
         <View style={styles.header}>
           <Text style={[styles.text, styles.title]}>
-            Let's drag and drop some tags!
+            Let's drag and drop some items!
           </Text>
           <Text style={styles.text}>
-            Drag and drop tags to reorder, tap to remove or press Add New to add new tags.
+            Drag and drop items to reorder, tap to remove or press Add New to add new tags.
           </Text>
         </View>
 
-        <Tags
-          tags={TAGS}
-          onPressAddNewTag={() => {}} // do nothing for now
+        <AnimatedDND
+          items={ITEMS}
+          onPressAddNewItem={() => {}}
+          ItemElement={ExampleItem} // do nothing for now
         />
-
       </View>
     );
   }

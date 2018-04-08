@@ -1,14 +1,9 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import * as React from 'react';
+import { View } from 'react-native';
 import type { NativeMethodsMixinType } from 'react-native/Libraries/Renderer/shims/ReactNativeTypes';
-import type { TagObject } from '../types';
+import type { ItemObject, ItemComponentProps } from '../types';
 
 const styles = {
   container: {
@@ -38,12 +33,13 @@ const styles = {
 };
 
 type Props = {
-  tag: TagObject,
+  item: ItemObject,
+  ItemElement: React.ComponentType<ItemComponentProps>,
   // Called when user taps on a tag
-  onPress: (tag: TagObject) => void,
+  onPress: (item: ItemObject) => void,
   // Called after a tag is rendered
   onRender: (
-    tag: TagObject,
+    item: ItemObject,
     screenX: number,
     screenY: number,
     width: number,
@@ -51,14 +47,8 @@ type Props = {
   ) => void,
 };
 
-export default class Tag extends PureComponent<Props> {
+export default class ItemWrapper extends React.PureComponent<Props> {
   container: ?NativeMethodsMixinType;
-
-  // Append styles.tagBeingDragged style if tag is being dragged
-  getTagStyle = (): {} => ({
-    ...styles.tag,
-    ...(this.props.tag.isBeingDragged ? styles.tagBeingDragged : {}),
-  });
 
   // Pass tag coordinates up to the parent component
   onMeasure = (
@@ -69,7 +59,7 @@ export default class Tag extends PureComponent<Props> {
     screenX: number,
     screenY: number,
   ): void => {
-    this.props.onRender(this.props.tag, screenX, screenY, width, height);
+    this.props.onRender(this.props.item, screenX, screenY, width, height);
   };
 
   // Call view container's measure function to measure tag position on the screen
@@ -80,25 +70,18 @@ export default class Tag extends PureComponent<Props> {
 
   // Handle tag taps
   onPress = (): void => {
-    this.props.onPress(this.props.tag);
+    this.props.onPress(this.props.item);
   };
 
   render() {
-    const { tag: { title } } = this.props;
+    const { item, ItemElement } = this.props;
     return (
       <View
         ref={(el) => { this.container = el; }}
         style={styles.container}
         onLayout={this.onLayout}
       >
-        <TouchableOpacity
-          style={this.getTagStyle()}
-          onPress={this.onPress}
-        >
-          <Icon name="ios-close-circle-outline" size={16} color="#FFF" />
-          <Text>{' '}</Text>
-          <Text style={styles.title}>{title}</Text>
-        </TouchableOpacity>
+        <ItemElement item={item} />
       </View>
     );
   }
