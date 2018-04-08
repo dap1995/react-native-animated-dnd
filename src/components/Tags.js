@@ -2,9 +2,9 @@
 
 import React, { PureComponent } from 'react';
 import {
+  LayoutAnimation,
   StyleSheet,
   View,
-  LayoutAnimation,
 } from 'react-native';
 import TagsArea from './TagsArea';
 import type { TagObject } from '../types';
@@ -43,12 +43,27 @@ export default class Tags extends PureComponent<Props, State> {
   };
 
   // Animate layout changes when dragging or removing a tag
-  componentWillUpdate() {
+  // eslint-disable-next-line camelcase
+  UNSAFE_componentWillUpdate() {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: this.props.animationDuration,
     });
   }
+
+  // Remove tag
+  removeTag = (tag: TagObject): void => {
+    this.setState((state: State) => {
+      const index = state.tags.findIndex(({ title }) => title === tag.title);
+      return {
+        tags: [
+          // Remove the tag
+          ...state.tags.slice(0, index),
+          ...state.tags.slice(index + 1),
+        ],
+      };
+    });
+  };
 
   render() {
     const { tags } = this.state;
@@ -59,7 +74,7 @@ export default class Tags extends PureComponent<Props, State> {
 
         <TagsArea
           tags={tags}
-          onPress={() => {}} // do nothing for now
+          onPress={this.removeTag} // do nothing for now
           onRenderTag={() => {}} // do nothing for now
           onPressAddNew={this.props.onPressAddNewTag}
         />
