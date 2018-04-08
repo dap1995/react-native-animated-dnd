@@ -1,8 +1,20 @@
 {
   "name": "DragAndDropTags",
   "version": "0.0.1",
-  "private": true,
   "main": "animatedDND.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dap1995/react-native-animated-dnd.git"
+  },
+  "keywords": [
+    "react-native"
+  ],
+  "author": "Daniel André da Silva <dap1995@users.noreply.github.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dap1995/react-native-animated-dnd/issues"
+  },
+  "homepage": "https://github.com/dap1995/react-native-animated-dnd#readme",
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
