@@ -14,3 +14,9 @@ This project has some pending issues:
   - Must have a modal to creating tags
 
 Last but not least, contribute in your own way!
+
+### References
+[RationalAppDev Tutorial](https://github.com/rationalappdev/react-native-drag-and-drop-tags-tutorial)
+
+Thanks rationalappdev.com!
+
