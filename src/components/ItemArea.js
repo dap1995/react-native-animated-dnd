@@ -42,6 +42,8 @@ type Props = {
     width: number,
     height: number
   ) => void,
+  style?: {},
+  styleWrapper?: {},
 };
 
 export default class Area extends React.PureComponent<Props> {
@@ -54,10 +56,12 @@ export default class Area extends React.PureComponent<Props> {
       onPressAddNew,
       onRenderItem,
       ItemElement,
+      style,
+      styleWrapper,
     } = this.props;
 
     return (
-      <View style={styles.container}>
+      <View style={style || styles.container}>
         {
           items.map(item =>
           <ItemWrapper
@@ -66,6 +70,7 @@ export default class Area extends React.PureComponent<Props> {
             onPress={onPress}
             onRender={onRenderItem}
             ItemElement={ItemElement}
+            style={styleWrapper}
           />)
         }
         <Text

@@ -10,26 +10,6 @@ const styles = {
     marginBottom: 8,
     marginRight: 6,
   },
-  tag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, .33)',
-    borderColor: 'rgba(255, 255, 255, .25)',
-    borderRadius: 20,
-    borderWidth: 1,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-  },
-  tagBeingDragged: {
-    backgroundColor: 'rgba(255, 255, 255, .01)',
-    borderStyle: 'dashed',
-  },
-  title: {
-    color: '#FFFFFF',
-    fontFamily: 'Avenir',
-    fontSize: 15,
-    fontWeight: 'normal',
-  },
 };
 
 type Props = {
@@ -45,6 +25,7 @@ type Props = {
     width: number,
     height: number
   ) => void,
+  style?: {},
 };
 
 export default class ItemWrapper extends React.PureComponent<Props> {
@@ -74,14 +55,14 @@ export default class ItemWrapper extends React.PureComponent<Props> {
   };
 
   render() {
-    const { item, ItemElement } = this.props;
+    const { item, ItemElement, style } = this.props;
     return (
       <View
         ref={(el) => { this.container = el; }}
-        style={styles.container}
+        style={style || styles.container}
         onLayout={this.onLayout}
       >
-        <ItemElement item={item} />
+        <ItemElement item={item} onPress={this.onPress} />
       </View>
     );
   }

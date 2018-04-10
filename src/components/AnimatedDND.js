@@ -24,7 +24,11 @@ type Props = {
   animationDuration: number,
   // Passes onPressAddNewItem callback down to ItemsArea component
   onPressAddNewItem: () => void,
+  onPressItem: (item?: {}) => void,
   ItemElement: React.ComponentType<ItemComponentProps>,
+  style?: {},
+  styleArea?: {},
+  styleWrapper?: {},
 };
 
 type State = {
@@ -145,6 +149,10 @@ export default class AnimatedDND extends React.PureComponent<Props, State> {
 
   panResponder: PanResponder = this.createPanResponder();
 
+  onPressItem = (item: ItemObject): void => {
+    this.props.onPressItem(item);
+  }
+
   // Remove item
   removeItem = (item: ItemObject): void => {
     this.setState((state: State) => {
@@ -193,19 +201,26 @@ export default class AnimatedDND extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { ItemElement } = this.props;
+    const {
+      ItemElement,
+      style,
+      styleArea,
+      styleWrapper,
+    } = this.props;
     const { items } = this.state;
     return (
       <View
-        style={styles.container}
+        style={style || styles.container}
         {...this.panResponder.panHandlers}
       >
         <ItemArea
           items={items}
-          onPress={this.removeItem} // do nothing for now
+          onPress={this.onPressItem} // do nothing for now
           onRenderItem={this.onRenderItem} // do nothing for now
           onPressAddNew={this.props.onPressAddNewItem}
           ItemElement={ItemElement}
+          style={styleArea}
+          styleWrapper={styleWrapper}
         />
       </View>
     );

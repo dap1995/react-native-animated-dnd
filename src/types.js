@@ -27,4 +27,5 @@ export type GestureState = {
 
 export type ItemComponentProps = {
   item: ItemObject,
+  onPress?: () => void,
 };

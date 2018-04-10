@@ -6,6 +6,8 @@ import {
   StyleSheet,
   Text,
   View,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import AnimatedDND from './src/components/AnimatedDND';
 import type { ItemObject, ItemComponentProps } from './src/types';
@@ -48,12 +50,14 @@ const ITEMS: ItemObject[] = [
 
 class ExampleItem extends React.Component<ItemComponentProps> {
   render() {
-    const { item: { isBeingDragged, key } } = this.props;
+    const { item: { isBeingDragged, key }, onPress } = this.props;
     const style = isBeingDragged && { backgroundColor: 'red' };
     return (
-      <View style={style}>
-        <Text>{key}</Text>
-      </View>
+      <TouchableOpacity onPress={onPress}>
+        <View style={style}>
+          <Text>{key}</Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
@@ -77,6 +81,7 @@ export default class Main extends PureComponent<Props> {
         <AnimatedDND
           items={ITEMS}
           onPressAddNewItem={() => {}}
+          onPressItem={(item) => { Alert.alert('Message ', JSON.stringify(item)); }}
           ItemElement={ExampleItem} // do nothing for now
         />
       </View>
