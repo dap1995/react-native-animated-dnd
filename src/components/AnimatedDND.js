@@ -36,7 +36,7 @@ type State = {
   dndEnabled: boolean,
 };
 
-export default class AnimatedDND extends React.PureComponent<Props, State> {
+export default class AnimatedDND extends React.Component<Props, State> {
   props: Props;
 
   static defaultProps = {

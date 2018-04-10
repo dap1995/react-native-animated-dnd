@@ -28,7 +28,7 @@ type Props = {
   style?: {},
 };
 
-export default class ItemWrapper extends React.PureComponent<Props> {
+export default class ItemWrapper extends React.Component<Props> {
   container: ?NativeMethodsMixinType;
 
   // Pass tag coordinates up to the parent component

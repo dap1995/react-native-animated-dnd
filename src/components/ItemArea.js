@@ -46,7 +46,7 @@ type Props = {
   styleWrapper?: {},
 };
 
-export default class Area extends React.PureComponent<Props> {
+export default class Area extends React.Component<Props> {
   props: Props;
 
   render() {
