@@ -34,7 +34,7 @@ type Props = {
   // Called when user taps 'Add new' button
   onPressAddNew: () => void,
   // Passes these two callbacks down to Item component
-  onPress: (item: ItemObject) => void,
+  onPress: (item?: {}) => void,
   onRenderItem: (
     item: ItemObject,
     screenX: number,

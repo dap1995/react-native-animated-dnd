@@ -149,10 +149,6 @@ export default class AnimatedDND extends React.PureComponent<Props, State> {
 
   panResponder: PanResponder = this.createPanResponder();
 
-  onPressItem = (item: ItemObject): void => {
-    this.props.onPressItem(item);
-  }
-
   // Remove item
   removeItem = (item: ItemObject): void => {
     this.setState((state: State) => {
@@ -206,6 +202,7 @@ export default class AnimatedDND extends React.PureComponent<Props, State> {
       style,
       styleArea,
       styleWrapper,
+      onPressItem,
     } = this.props;
     const { items } = this.state;
     return (
@@ -215,7 +212,7 @@ export default class AnimatedDND extends React.PureComponent<Props, State> {
       >
         <ItemArea
           items={items}
-          onPress={this.onPressItem} // do nothing for now
+          onPress={onPressItem} // do nothing for now
           onRenderItem={this.onRenderItem} // do nothing for now
           onPressAddNew={this.props.onPressAddNewItem}
           ItemElement={ItemElement}

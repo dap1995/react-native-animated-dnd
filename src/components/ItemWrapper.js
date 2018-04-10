@@ -16,7 +16,7 @@ type Props = {
   item: ItemObject,
   ItemElement: React.ComponentType<ItemComponentProps>,
   // Called when user taps on a tag
-  onPress: (item: ItemObject) => void,
+  onPress: (item?: {}) => void,
   // Called after a tag is rendered
   onRender: (
     item: ItemObject,
@@ -49,20 +49,20 @@ export default class ItemWrapper extends React.PureComponent<Props> {
     this.container && this.container.measure(this.onMeasure);
   };
 
-  // Handle tag taps
-  onPress = (): void => {
-    this.props.onPress(this.props.item);
-  };
-
   render() {
-    const { item, ItemElement, style } = this.props;
+    const {
+      item,
+      ItemElement,
+      style,
+      onPress,
+    } = this.props;
     return (
       <View
         ref={(el) => { this.container = el; }}
         style={style || styles.container}
         onLayout={this.onLayout}
       >
-        <ItemElement item={item} onPress={this.onPress} />
+        <ItemElement item={item} onPress={onPress} />
       </View>
     );
   }
