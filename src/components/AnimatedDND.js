@@ -51,12 +51,22 @@ export default class AnimatedDND extends React.Component<Props, State> {
   itemBeingDragged: ?ItemObject;
 
   // Animate layout changes when dragging or removing an Item
-  // eslint-disable-next-line camelcase
-  UNSAFE_componentWillUpdate() {
+  componentDidUpdate() {
     LayoutAnimation.configureNext({
       ...LayoutAnimation.Presets.easeInEaseOut,
       duration: this.props.animationDuration,
     });
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const items = nextProps.items
+      .map((nextItem: ItemObject): ItemObject => {
+        const previousItem = this.state.items
+          .find((item: ItemObject): boolean => item.key === nextItem.key);
+        if (previousItem) return { ...previousItem, ...nextItem };
+        return nextItem;
+      });
+    this.setState({ items });
   }
 
   // Enable dnd back after the animation is over
@@ -85,12 +95,11 @@ export default class AnimatedDND extends React.Component<Props, State> {
   };
 
   // Find the item at given coordinates
-  findItemAtCoordinates = (x: number, y: number, exceptItem?: ItemObject): ?ItemObject => {
-    return this.state.items.find(item =>
+  findItemAtCoordinates = (x: number, y: number, exceptItem?: ItemObject): ?ItemObject =>
+    this.state.items.find(item =>
       item.tlX && item.tlY && item.brX && item.brY
       && isPointWithinArea(x, y, item.tlX, item.tlY, item.brX, item.brY)
       && (!exceptItem || exceptItem.key !== item.key));
-  };
 
   // Create PanResponder
   createPanResponder = (): PanResponder => PanResponder.create({
