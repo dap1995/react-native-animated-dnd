@@ -26,6 +26,7 @@ type Props = {
   onPressAddNewItem: () => void,
   onPressItem: (item?: {}) => void,
   ItemElement: React.ComponentType<ItemComponentProps>,
+  onChange?: (items: ItemObject[]) => void,
   style?: {},
   styleArea?: {},
   styleWrapper?: {},
@@ -147,6 +148,9 @@ export default class AnimatedDND extends React.Component<Props, State> {
     onPanResponderRelease: (): void => {
       if (!this.itemBeingDragged) return;
       this.updateItemState(this.itemBeingDragged, { isBeingDragged: false });
+      // return new state when dropped item
+      const { onChange } = this.props;
+      if (onChange) onChange(this.state.items);
       this.itemBeingDragged = undefined;
     },
     onPanResponderTerminate: (): void => {
