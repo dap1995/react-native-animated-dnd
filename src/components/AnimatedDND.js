@@ -60,13 +60,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const items = nextProps.items
-      .map((nextItem: ItemObject): ItemObject => {
-        const previousItem = this.state.items
-          .find((item: ItemObject): boolean => item.key === nextItem.key);
-        if (previousItem) return { ...previousItem, ...nextItem };
-        return nextItem;
-      });
+    const { items } = nextProps;
     this.setState({ items });
   }
 
