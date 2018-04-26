@@ -62,6 +62,17 @@ class ExampleItem extends React.Component<ItemComponentProps> {
   }
 }
 
+class ExampleDeleteItem extends React.Component<{}> {
+  render() {
+    const style = { padding: 10, backgroundColor: 'red' };
+    return (
+      <View style={style}>
+        <Text>Release here to delete</Text>
+      </View>
+    );
+  }
+}
+
 type Props = {};
 export default class Main extends PureComponent<Props> {
   render() {
@@ -81,8 +92,11 @@ export default class Main extends PureComponent<Props> {
         <AnimatedDND
           items={ITEMS}
           onPressAddNewItem={() => {}}
-          onPressItem={(item) => { Alert.alert('Message ', JSON.stringify(item)); }}
-          ItemElement={ExampleItem} // do nothing for now
+          onPressItem={() => {
+            Alert.alert('Clicked');
+          }}
+          ItemElement={ExampleItem}
+          DeleteElement={ExampleDeleteItem}
         />
       </View>
     );

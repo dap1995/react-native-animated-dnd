@@ -8,7 +8,12 @@ import {
   View,
 } from 'react-native';
 import ItemArea from './ItemArea';
-import type { ItemComponentProps, ItemObject, GestureState } from '../types';
+import type {
+  ItemComponentProps,
+  ItemObject,
+  GestureState,
+  DeleteCoordinates,
+} from '../types';
 import { isPointWithinArea, moveArrayElement } from '../helpers';
 
 const styles = StyleSheet.create({
@@ -26,6 +31,7 @@ type Props = {
   onPressAddNewItem: () => void,
   onPressItem: (item?: {}) => void,
   ItemElement: React.ComponentType<ItemComponentProps>,
+  DeleteElement?: React.ComponentType<{}>,
   onChange?: (items: ItemObject[]) => void,
   style?: {},
   styleArea?: {},
@@ -35,6 +41,7 @@ type Props = {
 type State = {
   items: ItemObject[],
   dndEnabled: boolean,
+  deleteCoordinates: DeleteCoordinates,
 };
 
 export default class AnimatedDND extends React.Component<Props, State> {
@@ -47,6 +54,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
   state: State = {
     items: this.props.items, // remove duplicates
     dndEnabled: true,
+    deleteCoordinates: {},
   };
 
   itemBeingDragged: ?ItemObject;
@@ -139,10 +147,21 @@ export default class AnimatedDND extends React.Component<Props, State> {
         this.swapItems(this.itemBeingDragged, draggedOverItem);
       }
     },
-    onPanResponderRelease: (): void => {
+    onPanResponderRelease: (_, gestureState): void => {
       if (!this.itemBeingDragged) return;
       this.updateItemState(this.itemBeingDragged, { isBeingDragged: false });
-      // return new state when dropped item
+      const { moveX, moveY } = gestureState;
+      const {
+        tlX = 0, tlY = 0,
+        brX = 0, brY = 0,
+      } = this.state.deleteCoordinates;
+      const shouldRemove = isPointWithinArea(
+        moveX, moveY,
+        tlX, tlY,
+        brX, brY,
+      );
+      if (!this.itemBeingDragged) return; // It's necessary for flow validation
+      if (shouldRemove) this.removeItem(this.itemBeingDragged);
       const { onChange } = this.props;
       if (onChange) onChange(this.state.items);
       this.itemBeingDragged = undefined;
@@ -203,9 +222,27 @@ export default class AnimatedDND extends React.Component<Props, State> {
     });
   };
 
+  onRenderDelete = (
+    screenX: number,
+    screenY: number,
+    width: number,
+    height: number,
+  ): void => {
+    this.setState(() => {
+      const deleteCoordinates: DeleteCoordinates = {
+        tlX: screenX,
+        tlY: screenY,
+        brX: (screenX + width),
+        brY: (screenY + height),
+      };
+      return { deleteCoordinates };
+    });
+  }
+
   render() {
     const {
       ItemElement,
+      DeleteElement,
       style,
       styleArea,
       styleWrapper,
@@ -221,8 +258,10 @@ export default class AnimatedDND extends React.Component<Props, State> {
           items={items}
           onPress={onPressItem} // do nothing for now
           onRenderItem={this.onRenderItem} // do nothing for now
+          onRenderDelete={this.onRenderDelete}
           onPressAddNew={this.props.onPressAddNewItem}
           ItemElement={ItemElement}
+          DeleteElement={DeleteElement}
           style={styleArea}
           styleWrapper={styleWrapper}
         />

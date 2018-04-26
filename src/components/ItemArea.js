@@ -1,12 +1,13 @@
 // @flow
 
 import * as React from 'react';
-import {
-  Text,
-  View,
-} from 'react-native';
+import { View } from 'react-native';
+import type { NativeMethodsMixinType } from 'react-native/Libraries/Renderer/shims/ReactNativeTypes';
 import ItemWrapper from './ItemWrapper';
-import type { ItemComponentProps, ItemObject } from '../types';
+import type {
+  ItemComponentProps,
+  ItemObject,
+} from '../types';
 
 const styles = {
   container: {
@@ -31,6 +32,8 @@ const styles = {
 type Props = {
   items: ItemObject[],
   ItemElement: React.ComponentType<ItemComponentProps>,
+  DeleteElement?: React.ComponentType<{}>,
+  AddElement?: React.ComponentType<{}>,
   // Called when user taps 'Add new' button
   onPressAddNew: () => void,
   // Passes these two callbacks down to Item component
@@ -42,12 +45,37 @@ type Props = {
     width: number,
     height: number
   ) => void,
+  onRenderDelete: (
+    screenX: number,
+    screenY: number,
+    width: number,
+    height: number
+  ) => void,
   style?: {},
   styleWrapper?: {},
 };
 
 export default class Area extends React.Component<Props> {
   props: Props;
+  deleteView: ?NativeMethodsMixinType;
+
+  // Pass tag coordinates up to the parent component
+  onMeasure = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    screenX: number,
+    screenY: number,
+  ): void => {
+    this.props.onRenderDelete(screenX, screenY, width, height);
+  };
+
+  // Call view container's measure function to measure tag position on the screen
+  onLayout = (): void => {
+    // eslint-disable-next-line no-unused-expressions
+    this.deleteView && this.deleteView.measure(this.onMeasure);
+  };
 
   render() {
     const {
@@ -56,6 +84,8 @@ export default class Area extends React.Component<Props> {
       onPressAddNew,
       onRenderItem,
       ItemElement,
+      DeleteElement,
+      AddElement = null,
       style,
       styleWrapper,
     } = this.props;
@@ -73,12 +103,15 @@ export default class Area extends React.Component<Props> {
             style={styleWrapper}
           />)
         }
-        <Text
-          style={styles.add}
-          onPress={onPressAddNew}
-        >
-          Add new
-        </Text>
+        { AddElement && <AddElement onPress={onPressAddNew} /> }
+        { DeleteElement &&
+          <View
+            ref={(el) => { this.deleteView = el; }}
+            onLayout={this.onLayout}
+          >
+            <DeleteElement />
+          </View>
+        }
       </View>
     );
   }

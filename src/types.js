@@ -29,3 +29,10 @@ export type ItemComponentProps = {
   item: ItemObject,
   onPress?: () => void,
 };
+
+export type DeleteCoordinates = {
+  tlX?: number,
+  tlY?: number,
+  brX?: number,
+  brY?: number,
+};
