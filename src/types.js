@@ -27,7 +27,7 @@ export type GestureState = {
 
 export type ItemComponentProps = {
   item: ItemObject,
-  onPress?: () => void,
+  onPress?: (data: {}) => void,
 };
 
 export type DeleteCoordinates = {

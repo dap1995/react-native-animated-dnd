@@ -29,7 +29,7 @@ type Props = {
   animationDuration: number,
   // Passes onPressAddNewItem callback down to ItemsArea component
   onPressAddNewItem: () => void,
-  onPressItem: (item?: {}) => void,
+  onPressItem: (item: {}, items?: ItemObject[]) => void,
   ItemElement: React.ComponentType<ItemComponentProps>,
   DeleteElement?: React.ComponentType<{}>,
   onChange?: (items: ItemObject[]) => void,
@@ -239,6 +239,17 @@ export default class AnimatedDND extends React.Component<Props, State> {
     });
   }
 
+  /**
+   * It's a callback to use when a ItemElement is pressed.
+   *
+   * @param {Object} data Object props comes from ItemElement
+   * @return {Void} It calls onPressItem props passing items from state and data object.
+   */
+  onPress = (data: {}) => {
+    const { items } = this.state;
+    this.props.onPressItem(data, items);
+  }
+
   render() {
     const {
       ItemElement,
@@ -256,8 +267,8 @@ export default class AnimatedDND extends React.Component<Props, State> {
       >
         <ItemArea
           items={items}
-          onPress={onPressItem} // do nothing for now
-          onRenderItem={this.onRenderItem} // do nothing for now
+          onPress={onPressItem}
+          onRenderItem={this.onRenderItem}
           onRenderDelete={this.onRenderDelete}
           onPressAddNew={this.props.onPressAddNewItem}
           ItemElement={ItemElement}

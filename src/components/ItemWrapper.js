@@ -16,7 +16,7 @@ type Props = {
   item: ItemObject,
   ItemElement: React.ComponentType<ItemComponentProps>,
   // Called when user taps on a tag
-  onPress: (item?: {}) => void,
+  onPress: (item: {}, items?: ItemObject[]) => void,
   // Called after a tag is rendered
   onRender: (
     item: ItemObject,
