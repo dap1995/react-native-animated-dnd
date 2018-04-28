@@ -257,7 +257,6 @@ export default class AnimatedDND extends React.Component<Props, State> {
       style,
       styleArea,
       styleWrapper,
-      onPressItem,
     } = this.props;
     const { items } = this.state;
     return (
@@ -267,7 +266,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
       >
         <ItemArea
           items={items}
-          onPress={onPressItem}
+          onPress={this.onPress}
           onRenderItem={this.onRenderItem}
           onRenderDelete={this.onRenderDelete}
           onPressAddNew={this.props.onPressAddNewItem}
