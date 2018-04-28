@@ -183,6 +183,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
           isToDelete ? 'DELETE' : undefined,
         );
       }
+      this.setState({ isOnDelete: false });
       this.itemBeingDragged = undefined;
     },
     onPanResponderTerminate: (): void => {
