@@ -51,6 +51,7 @@ type Props = {
     width: number,
     height: number
   ) => void,
+  isOnDelete: boolean,
   style?: {},
   styleWrapper?: {},
 };
@@ -88,6 +89,7 @@ export default class Area extends React.Component<Props> {
       AddElement = null,
       style,
       styleWrapper,
+      isOnDelete,
     } = this.props;
 
     return (
@@ -109,7 +111,7 @@ export default class Area extends React.Component<Props> {
             ref={(el) => { this.deleteView = el; }}
             onLayout={this.onLayout}
           >
-            <DeleteElement />
+            <DeleteElement active={isOnDelete} />
           </View>
         }
       </View>

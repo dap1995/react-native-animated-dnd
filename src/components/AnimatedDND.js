@@ -32,7 +32,7 @@ type Props = {
   onPressItem: (item: {}, items?: ItemObject[]) => void,
   ItemElement: React.ComponentType<ItemComponentProps>,
   DeleteElement?: React.ComponentType<{}>,
-  onChange?: (items: ItemObject[]) => void,
+  onChange?: (items: ItemObject[], itemToChange: ItemObject, action?: ?string) => void,
   style?: {},
   styleArea?: {},
   styleWrapper?: {},
@@ -42,6 +42,7 @@ type State = {
   items: ItemObject[],
   dndEnabled: boolean,
   deleteCoordinates: DeleteCoordinates,
+  isOnDelete: boolean,
 };
 
 export default class AnimatedDND extends React.Component<Props, State> {
@@ -55,6 +56,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
     items: this.props.items, // remove duplicates
     dndEnabled: true,
     deleteCoordinates: {},
+    isOnDelete: false,
   };
 
   itemBeingDragged: ?ItemObject;
@@ -146,6 +148,16 @@ export default class AnimatedDND extends React.Component<Props, State> {
         if (!this.itemBeingDragged) return;
         this.swapItems(this.itemBeingDragged, draggedOverItem);
       }
+      const {
+        tlX = 0, tlY = 0,
+        brX = 0, brY = 0,
+      } = this.state.deleteCoordinates;
+      const isOnDelete = isPointWithinArea(
+        moveX, moveY,
+        tlX, tlY,
+        brX, brY,
+      );
+      this.setState({ isOnDelete });
     },
     onPanResponderRelease: (_, gestureState): void => {
       if (!this.itemBeingDragged) return;
@@ -162,8 +174,15 @@ export default class AnimatedDND extends React.Component<Props, State> {
       );
       if (!this.itemBeingDragged) return; // It's necessary for flow validation
       if (shouldRemove) this.removeItem(this.itemBeingDragged);
-      const { onChange } = this.props;
-      if (onChange) onChange(this.state.items);
+      const { onChange, DeleteElement } = this.props;
+      if (onChange) {
+        const isToDelete = shouldRemove && DeleteElement;
+        onChange(
+          this.state.items,
+          this.itemBeingDragged,
+          isToDelete ? 'DELETE' : undefined,
+        );
+      }
       this.itemBeingDragged = undefined;
     },
     onPanResponderTerminate: (): void => {
@@ -258,7 +277,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
       styleArea,
       styleWrapper,
     } = this.props;
-    const { items } = this.state;
+    const { items, isOnDelete } = this.state;
     return (
       <View
         style={style || styles.container}
@@ -274,6 +293,7 @@ export default class AnimatedDND extends React.Component<Props, State> {
           DeleteElement={DeleteElement}
           style={styleArea}
           styleWrapper={styleWrapper}
+          isOnDelete={isOnDelete}
         />
       </View>
     );
