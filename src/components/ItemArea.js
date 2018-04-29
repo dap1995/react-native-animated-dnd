@@ -93,27 +93,31 @@ export default class Area extends React.Component<Props> {
     } = this.props;
 
     return (
-      <View style={style || styles.container}>
-        {
-          items.map(item =>
-          <ItemWrapper
-            key={item.key}
-            item={item}
-            onPress={onPress}
-            onRender={onRenderItem}
-            ItemElement={ItemElement}
-            style={styleWrapper}
-          />)
-        }
-        { AddElement && <AddElement onPress={onPressAddNew} /> }
-        { DeleteElement &&
-          <View
-            ref={(el) => { this.deleteView = el; }}
-            onLayout={this.onLayout}
-          >
-            <DeleteElement active={isOnDelete} />
-          </View>
-        }
+      <View>
+        <View style={style || styles.container}>
+          {
+            items.map(item =>
+            <ItemWrapper
+              key={item.key}
+              item={item}
+              onPress={onPress}
+              onRender={onRenderItem}
+              ItemElement={ItemElement}
+              style={styleWrapper}
+            />)
+          }
+        </View>
+        <View>
+          { AddElement && <AddElement onPress={onPressAddNew} /> }
+          { DeleteElement &&
+            <View
+              ref={(el) => { this.deleteView = el; }}
+              onLayout={this.onLayout}
+            >
+              <DeleteElement active={isOnDelete} />
+            </View>
+          }
+        </View>
       </View>
     );
   }
